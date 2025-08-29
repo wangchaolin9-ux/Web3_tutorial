@@ -1,0 +1,6 @@
+.env
+.env.enc
+node_modules
+artifacts
+cache
+

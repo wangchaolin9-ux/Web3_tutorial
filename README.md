@@ -39,3 +39,9 @@ npx hardhat deploy --network sepolia --reset 如果源码有修改，不加也�
 npm install --save-dev @nomicfoundation/hardhat-network-helpers
 
 npm install --save-dev @nomicfoundation/hardhat-ethers@3hardhat 不安装也可以
+
+统计测试gas费 新版本的hardhat已经默认安装了
+npm install -D hardhat-gas-reporter
+
+//执行测试用例，并统计测试用例对代码的覆盖率
+npx hardhat coverage

@@ -14,13 +14,13 @@ module.exports = async ({getNamedAccounts, deployments}) => {
     console.log("dataFeedAddress:", dataFeedAddress)
     let waitConfirmations = 0;
     if (network.name !== "hardhat") {
-        // waitConfirmations = CONFIRMATIONS;
+        waitConfirmations = CONFIRMATIONS;
     }
     const fundMe = await deploy("FundMe", { //部署的合约名字
         from: firstAccount,  //使用那个账户去部署
         args: [LOCK_TIME, dataFeedAddress], //合约构造函数的参数
         log: true, //是否打印日志,
-        // force:true,//强制重新部署，加了这个就不用写--reset了
+        force:true,//强制重新部署，加了这个就不用写--reset了
         waitConfirmations: waitConfirmations//在hardhat deploy插件中使用这个方法等待5个区块，不能使用await fundMe.deploymentTransaction().wait(5)
     })
 

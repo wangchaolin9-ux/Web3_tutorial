@@ -12,6 +12,9 @@ const PRIVATE_KEY_1 = process.env.PRIVATE_KEY_1
 module.exports = {
     defaultNetwork: "hardhat", //默认部署的网站就是本地的in-process网络,不写就是这个默认的，也可以修改默认的网络
     solidity: "0.8.28",
+    mocha: {
+        timeout: 1000000
+    },
     networks: {
         sepolia: {
             //节点提供商有 Alchemy, Infura, Quicknode
@@ -33,5 +36,9 @@ module.exports = {
         secondAccount: {
             default: 1
         }
+    },
+    gasReporter: {
+        //关闭gas消耗统计
+        enabled: false
     }
 };

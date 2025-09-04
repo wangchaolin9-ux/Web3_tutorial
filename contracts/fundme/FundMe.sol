@@ -11,7 +11,7 @@ import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/shared/interf
  */
 contract FundMe {
 
-    AggregatorV3Interface internal dataFeed;
+    AggregatorV3Interface public dataFeed;
 
     mapping(address => uint256) public fundersToAmount;
     //最小筹款金额 单位是USD
@@ -25,12 +25,14 @@ contract FundMe {
     address private erc20Address;
     bool public getFundSuccess;
 
-    constructor(uint256 _lockTime) {
-        dataFeed = AggregatorV3Interface(0x694AA1769357215DE4FAC081bf1f309aDC325306);
+    event FundWithdrawByOwner(uint256 amount);
+    event RefundByFunder(address, uint256);
+
+    constructor(uint256 _lockTime, address addr) {
+        dataFeed = AggregatorV3Interface(addr);
         owner = msg.sender;
         deploymentTimestamp = block.timestamp;
         lockTime = _lockTime;
-
     }
 
     //payable 表示可以方法可以收取验证通证eth。
@@ -45,6 +47,7 @@ contract FundMe {
         uint256 ethBalance = address(this).balance;
         require(convertEthToUSD(ethBalance) >= TARGET, "Not Reach Target");
         require(msg.sender == owner, "Not Owner,can't getFund");
+        uint256 balance = address(this).balance;
         if (transferType == "transfer") {
             //transfer 纯转账 转账是由调用合约的人发起的。 如果失败会revert错误
             payable(msg.sender).transfer(address(this).balance);
@@ -60,6 +63,7 @@ contract FundMe {
             require(success, "call fail");
         }
         getFundSuccess = true;
+        emit FundWithdrawByOwner(balance);
     }
 
     function refund() external windowClosed {
@@ -69,6 +73,7 @@ contract FundMe {
         uint256 refundAmount = fundersToAmount[msg.sender];
         fundersToAmount[msg.sender] = 0; //先执行将sender的余额设置为0，在退款给sender
         payable(msg.sender).transfer(refundAmount);
+        emit RefundByFunder(msg.sender, refundAmount);
     }
 
 

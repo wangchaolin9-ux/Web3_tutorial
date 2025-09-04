@@ -1,6 +1,6 @@
 const {task} = require("hardhat/config")
 
-task("deploy-fundMe","部署合约").setAction(async (taskArgs, hre) => {
+task("deploy-fundMe", "部署合约").setAction(async (taskArgs, hre) => {
     //创建一个合约工厂,这个工厂是用来创建FundMe合约的
     const fundMeFactory = await ethers.getContractFactory("FundMe");
     console.log("Deploying contract...")
@@ -19,7 +19,7 @@ async function verify(fundMe, args) {
         await fundMe.deploymentTransaction().wait(3)
         //部署完成后对合约进行验证
         await hre.run("verify:verify", {
-            address: fundMe.target,
+            address: fundMe.target,//原生的Ethers v6，所以使用.target 而hardhat deploy插件中需要使用.address
             constructorArguments: args,
         });
         console.log("Contract verified")

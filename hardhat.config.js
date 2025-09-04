@@ -2,6 +2,7 @@ require("@nomicfoundation/hardhat-toolbox");
 // require("dotenv").config()//必须写config
 require("@chainlink/env-enc").config() //这里使用加密的env-enc配置文件，这个会把.env.enc的内容保存在全局环境变量全局环境变量 process.env中，其他js就可以直接使用了
 require("./tasks/index") //创建了task需要再这个配置文件中引入，才会生效
+require('hardhat-deploy')
 const SEPOLIA_URL = process.env.SEPOLIA_URL
 const PRIVATE_KEY = process.env.PRIVATE_KEY
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY
@@ -22,6 +23,15 @@ module.exports = {
     etherscan: {//对合约进行验证需要配置ethscan的apikey 才能验证
         apiKey: {
             sepolia: ETHERSCAN_API_KEY
+        }
+    },
+    //给上面的accounts配置的私钥，取个名字
+    namedAccounts: {
+        firstAccount: { //名字就是firstAccount
+            default: 0 //意思是去上面accounts里面的第一个账户
+        },
+        secondAccount: {
+            default: 1
         }
     }
 };
